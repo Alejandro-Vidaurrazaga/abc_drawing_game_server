@@ -19,8 +19,13 @@ def home():
     return route
 
 
-@app.route('/good_prediction')
+@app.route('/good_prediction', methods=["POST"])
+@cross_origin(supports_credentials=True)
 def good_prediction():
+    if request.is_json:
+        req = request.get_json()
+        return make_response(jsonify({'predicted_letter': 'A', 'certain': 0.9, 'real_letter': 'A'}, 200))
+
     return make_response(jsonify({'predicted_letter': 'A', 'certain': 0.9, 'real_letter': 'A'}, 200))
 
 
@@ -29,12 +34,15 @@ def good_prediction():
 def bad_prediction():
     if request.is_json:
         req = request.get_json()
-        return make_response(jsonify(req), 200)
+        # return make_response(jsonify(req), 200)
+
+        return make_response(jsonify({'predicted_letter': 'A', 'certain': 0.9, 'real_letter': 'A'}, 200))
 
     return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
 
 
 @app.route("/json", methods=["POST"])
+@cross_origin(supports_credentials=True)
 def json():
     if request.is_json:
         req = request.get_json()
@@ -57,6 +65,6 @@ if __name__ == '__main__':
         port = int(os.environ.get('PORT'))
         app.run(host='0.0.0.0', port=port)
 
-        # app.run(host='0.0.0.0')
+        # app.run(host='localhost')
     except Exception:
         print('Problems finding the PORT variable')
