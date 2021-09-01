@@ -17,12 +17,12 @@ def home():
 
 @app.route('/good_prediction')
 def good_prediction():
-    return make_response(jsonify({'predicted_letter': 'A', 'certain': '0.9', 'real_letter': 'A'}, 200))
+    return make_response(jsonify({'predicted_letter': 'A', 'certain': 0.9, 'real_letter': 'A'}, 200))
 
 
 @app.route('/bad_prediction')
 def bad_prediction():
-    return make_response(jsonify({'predicted_letter': 'B', 'certain': '0.51', 'real_letter': 'A'}, 200))
+    return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
 
 
 if __name__ == '__main__':
