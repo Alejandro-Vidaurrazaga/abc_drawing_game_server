@@ -1,11 +1,9 @@
-import base64
 import os
+import base64
 import numpy as np
-import pandas as pd
-from flask_cors import CORS, cross_origin
 from inference import clf
-from flask import Flask, request, url_for, make_response, jsonify
-from skimage.transform import resize
+from flask_cors import CORS, cross_origin
+from flask import Flask, request, make_response, jsonify
 
 
 app = Flask(__name__)
