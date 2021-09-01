@@ -29,7 +29,6 @@ def good_prediction():
 def bad_prediction():
     if request.is_json:
         req = request.get_json()
-
         return make_response(jsonify({'key': 'Im working'}), 200)
 
     return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
