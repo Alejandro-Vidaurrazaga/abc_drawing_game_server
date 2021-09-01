@@ -34,7 +34,6 @@ def bad_prediction():
 def json():
     if request.is_json:
         req = request.get_json()
-
         # response_body = {
         #     "message": "JSON received!",
         #     "sender": req.get("data")
