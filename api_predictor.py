@@ -1,10 +1,11 @@
 import os
 import pandas as pd
+from flask_cors import CORS
 from inference import clf
 from flask import Flask, request, url_for, make_response, jsonify
 
 app = Flask(__name__)
-
+cors = CORS(app)
 
 @app.route('/')
 def home():
@@ -22,6 +23,32 @@ def good_prediction():
 
 @app.route('/bad_prediction')
 def bad_prediction():
+    return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
+
+
+@app.route('/bad_prediction')
+def bad_prediction():
+    return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
+
+
+@app.route("/json", methods=["POST"])
+def json():
+    if request.is_json:
+
+        req = request.get_json()
+
+        response_body = {
+            "message": "JSON received!",
+            "sender": req.get("name")
+        }
+
+        res = make_response(jsonify(response_body), 200)
+
+        return res
+
+    else:
+
+        return make_response(jsonify({"message": "Request body must be JSON"}), 400)
     return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
 
 
