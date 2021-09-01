@@ -1,10 +1,10 @@
-import base64
 import os
+import base64
 import numpy as np
-import pandas as pd
-from flask_cors import CORS, cross_origin
 from inference import clf
-from flask import Flask, request, url_for, make_response, jsonify
+from flask_cors import CORS, cross_origin
+from flask import Flask, request, make_response, jsonify
+
 
 app = Flask(__name__)
 # cors = CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers='*')
@@ -51,8 +51,14 @@ def json():
         #     "sender": req.get("data")
         # }
 
-        # img_decoded = base64.b64decode(req.get("data"))
-        # buffer = np.fromstring(img_decoded, np.float32)
+        try:
+            img_decoded = base64.b64decode(req.get("data"))
+            buffer = np.fromstring(img_decoded, np.float32)
+            img = resize(buffer, (28, 28)).reshape(1, -1)
+            make_response(jsonify({'img': img}), 200)
+        except Exception as ex:
+            print(ex)
+
         # res = make_response(jsonify({'resp': buffer}), 200)
 
         return make_response(jsonify(req), 400)
