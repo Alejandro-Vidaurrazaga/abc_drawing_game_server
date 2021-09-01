@@ -1,7 +1,6 @@
 # Customs
 cellular_churn_greece.csv
 preds.csv
-X_test.csv
 train.py
 .idea
 

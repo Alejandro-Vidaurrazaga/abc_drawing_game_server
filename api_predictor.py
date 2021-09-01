@@ -7,6 +7,7 @@ from flask import Flask, request, url_for, make_response, jsonify
 app = Flask(__name__)
 cors = CORS(app)
 
+
 @app.route('/')
 def home():
     route = f'For testing purpose try one of this one:\n' \
