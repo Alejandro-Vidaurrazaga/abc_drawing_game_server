@@ -26,11 +26,6 @@ def bad_prediction():
     return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
 
 
-@app.route('/bad_prediction')
-def bad_prediction():
-    return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
-
-
 @app.route("/json", methods=["POST"])
 def json():
     if request.is_json:
@@ -47,9 +42,7 @@ def json():
         return res
 
     else:
-
-        return make_response(jsonify({"message": "Request body must be JSON"}), 400)
-    return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
+        return make_response(jsonify({"message": "No JSON"}), 400)
 
 
 if __name__ == '__main__':
