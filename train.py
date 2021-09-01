@@ -16,6 +16,22 @@ def save_model(my_model,model_filename):
     with open(model_filename, 'wb') as handle:
         pickle.dump(my_model, handle)
 
+
+def create_models(filename):
+    df = create_dataframe(filename,0)
+
+
+
+
+def create_dataframe(filename,target_letter):
+    df = pd.read_csv(filename)
+
+    not_letter_df = df[df.target != target_letter].sample(len(df[df.target == target_letter]))
+    letter_df = df[df.target == target_letter]
+    final_df = pd.concat([letter_df, not_letter_df], ignore_index=True)
+    print(final_df.head(10))
+    return final_df
+
 def load_and_get_sets(filename,target):
     """
     function that gets a filename and the name of target feature
@@ -42,13 +58,20 @@ def main():
     :return:
     """
     X_train, X_test, y_train, y_test = load_and_get_sets('datasets/A_Z Handwritten Data.csv','target')
-    #rf_clf = RandomForestClassifier()
-    #rf_clf.fit(X_train,y_train)
+    rf_clf = RandomForestClassifier()
+    rf_clf.fit(X_train,y_train)
     clf = LogisticRegression()
     clf.fit(X_train,y_train)
 
     save_model(clf, 'Logistic.pkl')
     print('M.L model saved as Logistic.pkl')
+    save_model(rf_clf, 'Random_Forest.pkl')
+
+    print('M.L model saved as Random_Forest.pkl')
+
+
+
+
 
 
 if __name__ == '__main__':
