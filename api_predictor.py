@@ -2,13 +2,13 @@ import base64
 import os
 import numpy as np
 import pandas as pd
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from inference import clf
 from flask import Flask, request, url_for, make_response, jsonify
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers='*')
-
+# cors = CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers='*')
+cors = CORS(app, support_credentials=True)
 
 @app.route('/')
 def home():
@@ -25,6 +25,7 @@ def good_prediction():
 
 
 @app.route('/bad_prediction', methods=["POST"])
+@cross_origin(supports_credentials=True)
 def bad_prediction():
     if request.is_json:
         req = request.get_json()
