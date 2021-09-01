@@ -7,7 +7,7 @@ from inference import clf
 from flask import Flask, request, url_for, make_response, jsonify
 
 app = Flask(__name__)
-cors = CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.route('/')
@@ -38,11 +38,11 @@ def json():
         #     "sender": req.get("data")
         # }
 
-        img_decoded = base64.b64decode(req.get("data"))
-        buffer = np.fromstring(img_decoded, np.float32)
-        res = make_response(jsonify({'resp': buffer}), 200)
+        # img_decoded = base64.b64decode(req.get("data"))
+        # buffer = np.fromstring(img_decoded, np.float32)
+        # res = make_response(jsonify({'resp': buffer}), 200)
 
-        return res
+        return make_response(jsonify(req), 400)
     else:
         return make_response(jsonify({"message": "No JSON"}), 400)
 
