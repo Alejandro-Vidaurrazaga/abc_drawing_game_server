@@ -55,9 +55,9 @@ def json():
 
 if __name__ == '__main__':
     try:
-        # port = int(os.environ.get('PORT'))
-        # app.run(host='0.0.0.0', port=port)
+        port = int(os.environ.get('PORT'))
+        app.run(host='0.0.0.0', port=port)
 
-        app.run(host='0.0.0.0')
+        # app.run(host='0.0.0.0')
     except Exception:
         print('Problems finding the PORT variable')
