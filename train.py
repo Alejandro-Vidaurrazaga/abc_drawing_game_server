@@ -45,6 +45,8 @@ def main():
     #rf_clf = RandomForestClassifier()
     #rf_clf.fit(X_train,y_train)
     clf = LogisticRegression()
+    clf.fit(X_train,y_train)
+
     save_model(clf, 'Logistic.pkl')
     print('M.L model saved as Logistic.pkl')
 
