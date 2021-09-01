@@ -1,3 +1,10 @@
+# Customs
+cellular_churn_greece.csv
+preds.csv
+X_test.csv
+train.py
+.idea
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
