@@ -1,6 +1,5 @@
 import base64
 import os
-
 import numpy as np
 import pandas as pd
 from flask_cors import CORS
@@ -25,7 +24,7 @@ def good_prediction():
     return make_response(jsonify({'predicted_letter': 'A', 'certain': 0.9, 'real_letter': 'A'}, 200))
 
 
-@app.route('/bad_prediction')
+@app.route('/bad_prediction', methods=["POST"])
 def bad_prediction():
     return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
 
@@ -44,7 +43,6 @@ def json():
         res = make_response(jsonify({'resp': buffer}), 200)
 
         return res
-
     else:
         return make_response(jsonify({"message": "No JSON"}), 400)
 
