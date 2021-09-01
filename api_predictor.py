@@ -2,6 +2,7 @@ import os
 import base64
 import numpy as np
 from inference import clf
+from skimage.transform import resize
 from flask_cors import CORS, cross_origin
 from flask import Flask, request, make_response, jsonify
 
