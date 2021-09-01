@@ -56,13 +56,13 @@ def json():
             img_decoded = base64.b64decode(req.get("data"))
             buffer = np.fromstring(img_decoded, np.float32)
             img = resize(buffer, (28, 28)).reshape(1, -1)
-            make_response(jsonify({'img': img}), 200)
+            return make_response(jsonify({'img': img}), 200)
         except Exception as ex:
             print(ex)
 
         # res = make_response(jsonify({'resp': buffer}), 200)
 
-        return make_response(jsonify(req), 400)
+        return make_response(jsonify({'error': 'error'}), 400)
     else:
         return make_response(jsonify({"message": "No JSON"}), 400)
 
