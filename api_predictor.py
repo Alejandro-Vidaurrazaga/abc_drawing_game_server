@@ -1,4 +1,7 @@
+import base64
 import os
+
+import numpy as np
 import pandas as pd
 from flask_cors import CORS
 from inference import clf
@@ -30,15 +33,16 @@ def bad_prediction():
 @app.route("/json", methods=["POST"])
 def json():
     if request.is_json:
-
         req = request.get_json()
 
-        response_body = {
-            "message": "JSON received!",
-            "sender": req.get("name")
-        }
+        # response_body = {
+        #     "message": "JSON received!",
+        #     "sender": req.get("data")
+        # }
 
-        res = make_response(jsonify(response_body), 200)
+        img_decoded = base64.b64decode(req.get("data"))
+        buffer = np.fromstring(img_decoded, np.float32)
+        res = make_response(jsonify({'resp': buffer}), 200)
 
         return res
 
