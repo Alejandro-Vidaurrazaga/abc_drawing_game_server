@@ -7,7 +7,7 @@ from inference import clf
 from flask import Flask, request, url_for, make_response, jsonify
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers='*')
 
 
 @app.route('/')
