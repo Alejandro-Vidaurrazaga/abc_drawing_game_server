@@ -1,7 +1,6 @@
 import io
 import os
 import base64
-
 import cv2
 import numpy as np
 import skimage
@@ -9,7 +8,6 @@ from PIL import Image
 from matplotlib import pyplot as plt
 from skimage import data
 from skimage.color import rgb2gray, rgba2rgb
-
 from inference import clf
 from skimage.transform import resize
 from flask_cors import CORS, cross_origin
@@ -90,6 +88,7 @@ dict_number_to_letter = {}
 for num in range(26):
     dict_number_to_letter[num]=letters[num]
 
+
 def json2(img):
     try:
         # img_decoded = base64.b64decode(img)
@@ -107,15 +106,27 @@ def json2(img):
 
         # with open("imageToSave.png", "wb") as fh:
         #     fh.write(base64.b64decode(img))
-
-        image = Image.open(io.BytesIO(base64.urlsafe_b64decode(img)))
+        image = Image.open(io.BytesIO(img))
+        # image = Image.open(io.BytesIO(base64.urlsafe_b64decode(img)))
         image_np = np.array(image)
-        image_np = rgb2gray(rgba2rgb(image_np))
+        # image_np = rgb2gray(rgba2rgb(image_np))
+        image_np = rgb2gray(image_np)
         # image = resize(image_np, (28, 28)).reshape(1, -1)
 
         image = resize(image_np, (28, 28))
-        plt.imshow(image, cmap='gray')
+        # image = resize(image_np, (24, 24))
+        # zeros = np.zeros((28, 28))
+        #
+        # zeros[2:26, 2:26] = image * 254
+        #
+
+        img = np.array(list(map(lambda x: 0 if x == 1 else 255, image.reshape(1, -1))))
+
+        plt.imshow(img.reshape(28, 28), cmap='gray')
+        print(img)
+        # plt.imshow(zeros.astype(int), cmap='gray')
         plt.show()
+        # print(image * 255)
         return
         with_255 = clf.predict(image * 255)
         without_255 = clf.predict(image)
@@ -124,6 +135,7 @@ def json2(img):
         print(clf.predict_proba(image))
     except Exception as ex:
         print(ex)
+
 
 if __name__ == '__main__':
     # try:
@@ -134,7 +146,16 @@ if __name__ == '__main__':
     # except Exception:
     #     print('Problems finding the PORT variable')
     img = "iVBORw0KGgoAAAANSUhEUgAAAEcAAACUCAYAAADBGjSeAAAAAXNSR0IArs4c6QAAA5tJREFUeF7tnDGS0zAUhn+xFR0cAEpauAAz0HAuOBYdzHAAKGnhAtBRsDGTbMhudm3p6UmyZefbKjMry9Kn7z0924mDTn/DcPt5058GKTyyzDDcNBp2ko6fLYdtqs1OCldjMwrSxRgTWdEwKgZwTsgeAgLOmU/ngIDzINhuAQFnNBPdAAJOHM7Fb+UTu1i4m4DY0s8pncGZKgNyCsTxemH5kjFnDqfR7gxVcY5RvcI5pI7sy6PKcGS+blnGpjxAteHsN0BDn8ugOV5Hmg0yTCSP9grgXEvKuSqPreTW4NjzTwNzDrWlod/+Q8swiVxzek/KmJPQ0rbgLcwhrOJL033OMd0WbmRO73ln0bDqfcdaFk7nlxG2HatVWG0iKQMn9sAmXafa4vNhP93vWMkLUMzxm+O15nDGycesaVvnaJGeW8Ic1+3FOzPrObTK4STjcr2V8uJweg6t5eF0XO8AJxL1XcDp9ToLOK3MGb5Kelmp4uiw5ikyJ31wHrjeap70/CJFYGkBeB/dtuAUFoApr+aE5VvoCXN8naVwjP/fC6n9GDuA40M6x1FTcKwhtW9nuO0xx1Tqn6MUzuFm7FYBlcL5JoVXW/15QCGcs+8Umh6U1Ze/XY8V4RwibFOAKsOxPQ9qt9Z1e24A5/8A0+V53anU760hnPuD7QLWcWe1FZ4zwmluVPVH0AvAqa9/qx6BEyELHOD4Ag9zMAdzfAQwx8eNnIM5mOMjgDk+buQczMEcHwHM8XEj52AO5vgIYI6PGzkHczDHRwBzfNzIOZiDOT4CmOPjRs7BHMzxEcAcHzdyDuZgjo8A5vi4kXMwB3N8BDDHx42cgzmY4yOAOT5u5BzMwRwfAczxcSPnYM4i5uinFJ77Tt3/UYVh1ftLocsWoBROx6+6KwOzP7r0FTHVf5FbPqV6PWCOY7fKeCeF7Qfs9dZzvp6mzPkh6ZltGBcHZ4/F+noF4MQi89JeS4U5ka0cOMBJ7DiRfEFCBk5+EUjOIeeQc2x1/lgrcg45x2cP5mAO5vgIYI6PGzkHczDHRwBzfNzIOZiDOT4CmOPjRs7BHMzxEcAcH7cKOUdfpPDad/q+j6oB548UHvc9Td/oYnD+SrqydbvNb1rE4HyX9AI4owSGd5I+AmeSgPV5ud5K4ZMN5HpaJb54ZIbzWQpv1jNt20hrwfklhae2U66nVS04v6XwZD3Tto20FhzCKsKbhDwB54MU3ttEXVerf+xGj1RfrehdAAAAAElFTkSuQmCC"
-    images = [img]
+    # images = [img]
+    images = []
+
+    an_image = Image.open("Sin título.png")
+    output = io.BytesIO()
+    an_image.save(output, format="png")
+    image_as_string = output.getvalue()
+    print(image_as_string)
+    images.append(image_as_string)
+
     for j, i in enumerate(images):
         print(f'Image {j}')
         json2(i)
