@@ -82,6 +82,66 @@ def json():
         return make_response(jsonify({"message": "No JSON"}), 400)
 
 
+@app.route("/json1", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def json1():
+    if request.is_json:
+        try:
+            req = request.get_json()
+            dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
+            row = fix_input_image(req.get("data"))
+
+            # letter, certain = dic_letters[clf.predict(row)[0]], clf.predict_proba(np.max(row))
+
+            return make_response(jsonify({'letter': dic_letters, 'certain': 'certain'}), 200)
+        except Exception as ex:
+            return make_response(jsonify({'error': ex}), 500)
+
+        # return make_response(jsonify({'error': 'asa'}), 500)
+    else:
+        return make_response(jsonify({"message": "No JSON"}), 400)
+
+
+@app.route("/json2", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def json2():
+    if request.is_json:
+        try:
+            req = request.get_json()
+            dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
+            # row = fix_input_image(req.get("data"))
+
+            # letter, certain = dic_letters[clf.predict(row)[0]], clf.predict_proba(np.max(row))
+
+            return make_response(jsonify({'letter': req.get("data"), 'certain': 'certain'}), 200)
+        except Exception as ex:
+            return make_response(jsonify({'error': ex}), 500)
+
+        # return make_response(jsonify({'error': 'asa'}), 500)
+    else:
+        return make_response(jsonify({"message": "No JSON"}), 400)
+
+
+@app.route("/json3", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def json3():
+    if request.is_json:
+        try:
+            req = request.get_json()
+            dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
+            row = fix_input_image(req.get("data"))
+
+            # letter, certain = dic_letters[clf.predict(row)[0]], clf.predict_proba(np.max(row))
+
+            return make_response(jsonify({'letter': row, 'certain': 'certain'}), 200)
+        except Exception as ex:
+            return make_response(jsonify({'error': ex}), 500)
+
+        # return make_response(jsonify({'error': 'asa'}), 500)
+    else:
+        return make_response(jsonify({"message": "No JSON"}), 400)
+
+
 if __name__ == '__main__':
     try:
         port = int(os.environ.get('PORT'))
