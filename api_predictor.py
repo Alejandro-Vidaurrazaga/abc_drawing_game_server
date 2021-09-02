@@ -73,7 +73,7 @@ def json():
             dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
             row = fix_input_image(req.get("data"))
 
-            letter, certain = dic_letters[clf.predict(row)[0]], clf.predict_proba(np.max(row))
+            letter, certain = dic_letters[clf.predict(row)[0]], np.max(clf.predict_proba(row))
 
             return make_response(jsonify({'letter': letter, 'certain': certain}), 200)
         except Exception as ex:
