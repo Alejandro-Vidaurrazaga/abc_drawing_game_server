@@ -39,68 +39,40 @@ def bad_prediction():
     return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
 
 
-# @app.route("/json", methods=["POST"])
-# @cross_origin(supports_credentials=True)
-# def json(img):
-#     # if request.is_json:
-#     #     req = request.get_json()
-#     #     # response_body = {
-#     #     #     "message": "JSON received!",
-#     #     #     "sender": req.get("data")
-#     #     # }
-#     #
-#     #     try:
-#     #         img_decoded = base64.b64decode(req.get("data"))
-#     #         buffer = np.fromstring(img_decoded, np.float32)
-#     #         img = resize(buffer, (28, 28)).reshape(1, -1)
-#     #         return make_response(jsonify({'img': img}), 200)
-#     #     except Exception as ex:
-#     #         print(ex)
-#     #
-#     #     # res = make_response(jsonify({'resp': buffer}), 200)
-#     #
-#     #     return make_response(jsonify({'error': 'error'}), 400)
-#     # else:
-#     #     return make_response(jsonify({"message": "No JSON"}), 400)
+# def fix_input_image(str_img):
+#     image = Image.open(io.BytesIO(base64.urlsafe_b64decode(str_img)))
+#     image_np = np.array(image)
+#     image_np = rgb2gray(rgba2rgb(image_np))
+#     image = resize(image_np, (28, 28))
 #
-#     try:
-#         img_decoded = base64.b64decode(img)
-#         buffer = np.fromstring(img_decoded, np.float32)
-#         img = resize(buffer, (28, 28)).reshape(1, -1)
-#         return make_response(jsonify({'img': img}), 200)
-#     except Exception as ex:
-#         print(ex)
+#     squarer2 = lambda t: 0 if t == 255 else t
+#     squarer = lambda t: (int((t + 1) * 255 / 2) - 255) * -1
+#     vfunc = np.vectorize(squarer)
+#     image = vfunc(image)
+#     vfunc = np.vectorize(squarer2)
+#     image = vfunc(image)
+#
+#     plt.imshow(image, cmap='gray')
+#     print(image)
+#     # plt.imshow(zeros.astype(int), cmap='gray')
+#     plt.show()
+#
+#     print(clf.predict(image.reshape((1, -1))))
+#     print(clf.predict_proba(image.reshape((1, -1))))
 
 
-# def json2(img):
-#     try:
-#         # img_decoded = base64.b64decode(img)
-#         # buffer = np.fromstring(str(img_decoded), np.int)
-#         # img = resize(buffer, (28, 28)).reshape(1, -1)
-#         # return make_response(jsonify({'img': img}), 200)
-#
-#         # decoded = base64.b64decode(img)
-#         # image = bytearray(decoded)
-#         # image = np.asarray(bytearray(decoded), dtype="uint8")
-#         # image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-#         # plt.imshow(image)
-#         # plt.show()
-#         # image
-#
-#         # with open("imageToSave.png", "wb") as fh:
-#         #     fh.write(base64.b64decode(img))
-#
-#         image = Image.open(io.BytesIO(base64.urlsafe_b64decode(img)))
-#         image_np = np.array(image)
-#         image = resize(image_np, (28, 28)).reshape(1, -1)
-#         # plt.imshow(image, cmap='gray')
-#         # plt.show()
-#         # with_255 = clf.predict(image * 255)
-#         # without_255 = clf.predict(image)
-#         # print(with_255)
-#         # print(without_255)
-#     except Exception as ex:
-#         print(ex)
+@app.route("/json", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def json():
+    if request.is_json:
+        req = request.get_json()
+        try:
+            return make_response(jsonify({'letter': 'This is your letter'}), 200)
+        except Exception as ex:
+            print(ex)
+        return make_response(jsonify({'error': 'error'}), 400)
+    else:
+        return make_response(jsonify({"message": "No JSON"}), 400)
 
 
 if __name__ == '__main__':
