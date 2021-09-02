@@ -77,7 +77,7 @@ def json():
 
             return make_response(jsonify({'letter': letter, 'certain': certain}), 200)
         except Exception as ex:
-            return make_response(jsonify({'error': ex}), 500)
+            return make_response(jsonify({'error': str(ex)}), 500)
 
         # return make_response(jsonify({'error': 'asa'}), 500)
     else:
