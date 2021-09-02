@@ -1,14 +1,16 @@
-import base64
+import string
+from PIL.Image import Image
+from inference import clf
 import io
 import os
-import string
+import base64
 import numpy as np
-from PIL.Image import Image
-from flask_cors import CORS, cross_origin
-from flask import Flask, request, make_response, jsonify
+from PIL import Image, ImageOps
 from skimage.color import rgb2gray, rgba2rgb
 from skimage.transform import resize
-from inference import clf
+from flask_cors import CORS, cross_origin
+from flask import Flask, request, make_response, jsonify
+
 
 app = Flask(__name__)
 # cors = CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers='*')
