@@ -1,12 +1,4 @@
-import io
 import os
-import base64
-import cv2
-import numpy as np
-from PIL import Image
-from matplotlib import pyplot as plt
-# from inference import clf
-from skimage.transform import resize
 from flask_cors import CORS, cross_origin
 from flask import Flask, request, make_response, jsonify
 
@@ -14,6 +6,7 @@ from flask import Flask, request, make_response, jsonify
 app = Flask(__name__)
 # cors = CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers='*')
 cors = CORS(app, support_credentials=True)
+
 
 @app.route('/')
 def home():
@@ -46,37 +39,37 @@ def bad_prediction():
     return make_response(jsonify({'predicted_letter': 'B', 'certain': 0.51, 'real_letter': 'A'}, 200))
 
 
-@app.route("/json", methods=["POST"])
-@cross_origin(supports_credentials=True)
-def json(img):
-    # if request.is_json:
-    #     req = request.get_json()
-    #     # response_body = {
-    #     #     "message": "JSON received!",
-    #     #     "sender": req.get("data")
-    #     # }
-    #
-    #     try:
-    #         img_decoded = base64.b64decode(req.get("data"))
-    #         buffer = np.fromstring(img_decoded, np.float32)
-    #         img = resize(buffer, (28, 28)).reshape(1, -1)
-    #         return make_response(jsonify({'img': img}), 200)
-    #     except Exception as ex:
-    #         print(ex)
-    #
-    #     # res = make_response(jsonify({'resp': buffer}), 200)
-    #
-    #     return make_response(jsonify({'error': 'error'}), 400)
-    # else:
-    #     return make_response(jsonify({"message": "No JSON"}), 400)
-
-    try:
-        img_decoded = base64.b64decode(img)
-        buffer = np.fromstring(img_decoded, np.float32)
-        img = resize(buffer, (28, 28)).reshape(1, -1)
-        return make_response(jsonify({'img': img}), 200)
-    except Exception as ex:
-        print(ex)
+# @app.route("/json", methods=["POST"])
+# @cross_origin(supports_credentials=True)
+# def json(img):
+#     # if request.is_json:
+#     #     req = request.get_json()
+#     #     # response_body = {
+#     #     #     "message": "JSON received!",
+#     #     #     "sender": req.get("data")
+#     #     # }
+#     #
+#     #     try:
+#     #         img_decoded = base64.b64decode(req.get("data"))
+#     #         buffer = np.fromstring(img_decoded, np.float32)
+#     #         img = resize(buffer, (28, 28)).reshape(1, -1)
+#     #         return make_response(jsonify({'img': img}), 200)
+#     #     except Exception as ex:
+#     #         print(ex)
+#     #
+#     #     # res = make_response(jsonify({'resp': buffer}), 200)
+#     #
+#     #     return make_response(jsonify({'error': 'error'}), 400)
+#     # else:
+#     #     return make_response(jsonify({"message": "No JSON"}), 400)
+#
+#     try:
+#         img_decoded = base64.b64decode(img)
+#         buffer = np.fromstring(img_decoded, np.float32)
+#         img = resize(buffer, (28, 28)).reshape(1, -1)
+#         return make_response(jsonify({'img': img}), 200)
+#     except Exception as ex:
+#         print(ex)
 
 
 # def json2(img):
