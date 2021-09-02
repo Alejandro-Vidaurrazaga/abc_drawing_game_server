@@ -75,8 +75,7 @@ def json():
 
             return make_response(jsonify({'letter': letter, 'certain': certain}), 200)
         except Exception as ex:
-            print(ex)
-        return make_response(jsonify({'error': ex}), 400)
+            return make_response(jsonify({'error': ex}), 500)
     else:
         return make_response(jsonify({"message": "No JSON"}), 400)
 
