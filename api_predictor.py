@@ -68,16 +68,18 @@ def fix_input_image(str_img):
 @cross_origin(supports_credentials=True)
 def json():
     if request.is_json:
+        asd = []
         try:
             req = request.get_json()
             dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
             row = fix_input_image(req.get("data"))
+            asd = fix_input_image(req.get("data"))
 
             letter, certain = dic_letters[clf.predict(row)[0]], np.max(clf.predict_proba(row))
 
             return make_response(jsonify({'letter': letter, 'certain': certain}), 200)
         except Exception as ex:
-            return make_response(jsonify({'error': str(ex)}), 500)
+            return make_response(jsonify({'error': str(ex), 'shape': asd.shape}), 500)
 
         # return make_response(jsonify({'error': 'asa'}), 500)
     else:
