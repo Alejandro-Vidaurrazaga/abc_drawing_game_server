@@ -59,10 +59,7 @@ def fix_input_image(str_img):
     vfunc = np.vectorize(squarer2)
     image = vfunc(image)
 
-    dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
-    row = image.reshape((1, -1))
-
-    return dic_letters[clf.predict(row)[0]], clf.predict_proba(np.max(row))
+    return image.reshape((1, -1))
 
 
 @app.route("/json", methods=["POST"])
@@ -71,11 +68,16 @@ def json():
     if request.is_json:
         try:
             req = request.get_json()
-            letter, certain = fix_input_image(req.get("data"))
+            dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
+            row = fix_input_image(req.get("data"))
 
-            return make_response(jsonify({'letter': letter, 'certain': certain}), 200)
+            # letter, certain = dic_letters[clf.predict(row)[0]], clf.predict_proba(np.max(row))
+
+            return make_response(jsonify({'letter': row, 'certain': 'certain'}), 200)
         except Exception as ex:
             return make_response(jsonify({'error': ex}), 500)
+
+        # return make_response(jsonify({'error': 'asa'}), 500)
     else:
         return make_response(jsonify({"message": "No JSON"}), 400)
 
