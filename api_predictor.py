@@ -1,14 +1,14 @@
-import string
-from PIL.Image import Image
-from inference import clf
 import io
 import os
 import base64
+import string
 import numpy as np
-from PIL import Image, ImageOps
-from skimage.color import rgb2gray, rgba2rgb
+from PIL import Image
+from inference import clf
+from PIL.Image import Image
 from skimage.transform import resize
 from flask_cors import CORS, cross_origin
+from skimage.color import rgb2gray, rgba2rgb
 from flask import Flask, request, make_response, jsonify
 
 
@@ -49,17 +49,24 @@ def bad_prediction():
 
 
 def fix_input_image(str_img):
+    """
+    Encode and invert the image to be used by the MNIST-trained model
+
+    :param str_img: String base64 representation of an image
+    :return: List of pixels that represent the image
+    """
+
     image = Image.open(io.BytesIO(base64.urlsafe_b64decode(str_img)))
     image_np = np.array(image)
     image_np = rgb2gray(rgba2rgb(image_np))
     image = resize(image_np, (28, 28))
 
-    squarer2 = lambda t: 0 if t == 255 else t
-    squarer = lambda t: (int((t + 1) * 255 / 2) - 255) * -1
-    vfunc = np.vectorize(squarer)
-    image = vfunc(image)
-    vfunc = np.vectorize(squarer2)
-    image = vfunc(image)
+    inverter = lambda x: 0 if x == 255 else x
+    scaler_255 = lambda x: (int((x + 1) * 255 / 2) - 255) * -1
+    vector_func = np.vectorize(scaler_255)
+    image = vector_func(image)
+    vector_func = np.vectorize(inverter)
+    image = vector_func(image)
 
     return image.reshape((1, -1))
 
@@ -78,68 +85,6 @@ def json():
             return make_response(jsonify({'letter': letter, 'certain': certain}), 200)
         except Exception as ex:
             return make_response(jsonify({'error': str(ex)}), 500)
-
-        # return make_response(jsonify({'error': 'asa'}), 500)
-    else:
-        return make_response(jsonify({"message": "No JSON"}), 400)
-
-
-@app.route("/json1", methods=["POST"])
-@cross_origin(supports_credentials=True)
-def json1():
-    if request.is_json:
-        try:
-            req = request.get_json()
-            dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
-            row = fix_input_image(req.get("data"))
-
-            letter, certain = dic_letters[clf.predict(row)[0]], np.max(clf.predict_proba(row))
-
-            return make_response(jsonify({'letter': letter, 'certain': certain}), 200)
-        except Exception as ex:
-            return make_response(jsonify({'error': str(ex)}), 500)
-
-        # return make_response(jsonify({'error': 'asa'}), 500)
-    else:
-        return make_response(jsonify({"message": "No JSON"}), 400)
-
-
-@app.route("/json2", methods=["POST"])
-@cross_origin(supports_credentials=True)
-def json2():
-    if request.is_json:
-        try:
-            req = request.get_json()
-            dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
-            # row = fix_input_image(req.get("data"))
-
-            # letter, certain = dic_letters[clf.predict(row)[0]], clf.predict_proba(np.max(row))
-
-            return make_response(jsonify({'letter': req.get("data"), 'certain': 'certain'}), 200)
-        except Exception as ex:
-            return make_response(jsonify({'error': ex}), 500)
-
-        # return make_response(jsonify({'error': 'asa'}), 500)
-    else:
-        return make_response(jsonify({"message": "No JSON"}), 400)
-
-
-@app.route("/json3", methods=["POST"])
-@cross_origin(supports_credentials=True)
-def json3():
-    if request.is_json:
-        try:
-            req = request.get_json()
-            dic_letters = {i: letter for i, letter in enumerate(string.ascii_uppercase)}
-            row = fix_input_image(req.get("data"))
-
-            # letter, certain = dic_letters[clf.predict(row)[0]], clf.predict_proba(np.max(row))
-
-            return make_response(jsonify({'letter': row, 'certain': 'certain'}), 200)
-        except Exception as ex:
-            return make_response(jsonify({'error': ex}), 500)
-
-        # return make_response(jsonify({'error': 'asa'}), 500)
     else:
         return make_response(jsonify({"message": "No JSON"}), 400)
 
