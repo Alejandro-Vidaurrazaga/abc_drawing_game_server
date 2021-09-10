@@ -5,7 +5,6 @@ import string
 import numpy as np
 from PIL import Image
 from inference import clf
-from PIL.Image import Image
 from skimage.transform import resize
 from flask_cors import CORS, cross_origin
 from skimage.color import rgb2gray, rgba2rgb
@@ -84,7 +83,7 @@ def json():
 
             return make_response(jsonify({'letter': letter, 'certain': certain}), 200)
         except Exception as ex:
-            return make_response(jsonify({'error': str(ex)}), 501)
+            return make_response(jsonify({'error': str(ex)}), 500)
     else:
         return make_response(jsonify({"message": "No JSON"}), 400)
 
